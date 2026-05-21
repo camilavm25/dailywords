@@ -37,8 +37,7 @@ class DailyTimer(commands.Cog):
         
 
     # Have it run daily
-    #@tasks.loop(time = TIME)
-    @tasks.loop(seconds = 5.0)
+    @tasks.loop(time = TIME)
     async def new_word_task(self):
         # Choose a word and remove it from the list
         word = random.choice(self.words)
