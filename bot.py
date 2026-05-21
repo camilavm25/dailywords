@@ -3,13 +3,15 @@ import os
 import random
 import datetime
 
-# Timezone
-import pytz
+# Time zone
+from zoneinfo import ZoneInfo
 
 # Discord
 import discord
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
+
+TIME = datetime.time(hour = 6, minute = 0, tzinfo = ZoneInfo("America/New_York"))
 
 # Timer class
 class DailyTimer(commands.Cog):
@@ -17,9 +19,10 @@ class DailyTimer(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.new_word_task.start()
+        
 
     # Have it run daily
-    @tasks.loop(seconds = 5.0) # seconds
+    @tasks.loop(time = TIME)
     async def new_word_task(self):
         # Choose a word and remove it from the list
         word = random.choice(words)
