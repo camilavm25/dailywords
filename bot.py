@@ -1,21 +1,26 @@
+# OS
 import os
 import random
+import datetime
 
+# Timezone
+import pytz
+
+# Discord
 import discord
+from discord.ext import commands, tasks
 from dotenv import load_dotenv
 
-# Define the Bot
-class DailyWordsBot(discord.Bot):
-    # On ready happens when the bot connects to Discord for the first time
-    async def on_ready(self):
-        print(f'{bot.user} has connected to Discord!')
+# Timer class
+class DailyTimer(commands.Cog):
+    # Start the timer Cog
+    def __init__(self, bot):
+        self.bot = bot
+        self.new_word_task.start()
 
-    # Send a message after any message
-    async def on_message(self, message):
-        # Make sure that it wasn't the bot that sent it
-        if message.author == self.user:
-            return
-        
+    # Have it run daily
+    @tasks.loop(seconds = 5.0) # seconds
+    async def new_word_task(self):
         # Choose a word and remove it from the list
         word = random.choice(words)
         words.remove(word)
@@ -33,8 +38,28 @@ class DailyWordsBot(discord.Bot):
                 else:
                     f.write(f",{w}")
 
-        # Print the word
-        await message.channel.send(f"Today's word of the day is: {word}")
+        # Get the channel
+        for guild in bot.guilds:
+            for channel in guild.channels:
+                if channel.name == "general":
+                    await channel.send(f"Today's word of the day is: {word}")
+                    break
+
+        print(word)
+
+
+# Define the Bot
+class DailyWordsBot(discord.Bot):
+    # On ready happens when the bot connects to Discord for the first time
+    async def on_ready(self):
+        self.add_cog(DailyTimer(self))
+        print(f'{bot.user} has connected to Discord!')
+
+    # Send a message after any message
+    async def on_message(self, message):
+        # Make sure that it wasn't the bot that sent it
+        if message.author == self.user:
+            return
 
 # Get the token
 load_dotenv()
