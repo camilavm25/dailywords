@@ -14,7 +14,7 @@ from discord.ext import commands, tasks
 from googletrans import Translator
 
 # Timer set for 6:00AM EST
-TIME = datetime.time(hour = 6, minute = 0, tzinfo = ZoneInfo("America/New_York"))
+TIME = datetime.time(hour = 18, minute = 54, tzinfo = ZoneInfo("America/New_York"))
 
 # Timer class
 class DailyTimer(commands.Cog):
@@ -61,18 +61,22 @@ class DailyTimer(commands.Cog):
                     f.write(f",{w}")
 
         # Translate the word
+        french  = await self.translator.translate(text = word, src = 'en', dest = 'fr')
         german  = await self.translator.translate(text = word, src = 'en', dest = 'de')
         spanish = await self.translator.translate(text = word, src = 'en', dest = 'es')
         telugu  = await self.translator.translate(text = word, src = 'en', dest = 'te')
+        # twi     = await self.translator.translate(text = word, src = 'en', dest = 'tw')
 
         # Get the date
         date = datetime.datetime.today().strftime('%A %d %B %Y')
 
         # Prepare the response
         response  = f"\tEnglish: **{word}**\n"
+        response += f"\tFrench: **{french.text}**\n"
         response += f"\tGerman: **{german.text}**\n"
         response += f"\tSpanish: **{spanish.text}**\n"
         response += f"\tTelugu: **{telugu.text}** (*{telugu.pronunciation}*)\n"
+        # response += f"\tTwi: **{twi.text}** (*{twi.pronunciation}*)\n"
 
         # Put it all together
         embed = discord.Embed(
