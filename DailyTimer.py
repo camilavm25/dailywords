@@ -72,20 +72,20 @@ class DailyTimer(commands.Cog):
         response += f"\tSpanish: **{spanish.text}**\n"
         response += f"\tTelugu: **{telugu.text}** (*{telugu.pronunciation}*)\n"
 
+        # Put it all together
         embed = discord.Embed(
             title = f"Word of the Day for {date}",
             description = response,
             color = discord.Color.green()
         )
 
-        # Get the channel
-        # TODO: Allow user to select channel
-        for guild in self.bot.guilds:
-            for channel in guild.channels:
-                if channel.name == "general":
-                    view = discord.ui.View()
-                    view.message = await channel.send(
-                        embed = embed,
-                        view = view
-                    )
-                    break
+        # Send it to every channel
+        for guild_id in self.bot.channel_dict:
+            channel_id = self.bot.channel_dict[guild_id]
+            channel = self.bot.get_channel(channel_id)
+
+            view = discord.ui.View()
+            view.message = await channel.send(
+                embed = embed,
+                view = view
+            )
