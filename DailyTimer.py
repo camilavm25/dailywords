@@ -13,6 +13,7 @@ from discord.ext import commands, tasks
 # Translator
 from googletrans import Translator
 
+# Timer set for 6:00AM EST
 TIME = datetime.time(hour = 6, minute = 0, tzinfo = ZoneInfo("America/New_York"))
 
 # Timer class
@@ -33,8 +34,9 @@ class DailyTimer(commands.Cog):
                     w = word.strip()
                     self.words.append(w)
 
+        # Run the cog
         self.new_word_task.start()
-        
+
 
     # Have it run daily
     @tasks.loop(time = TIME)
