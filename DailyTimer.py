@@ -14,7 +14,7 @@ from discord.ext import commands, tasks
 from googletrans import Translator
 
 # Timer set for 6:00AM EST
-TIME = datetime.time(hour = 18, minute = 54, tzinfo = ZoneInfo("America/New_York"))
+TIME = datetime.time(hour = 6, minute = 0, tzinfo = ZoneInfo("America/New_York"))
 
 # Timer class
 class DailyTimer(commands.Cog):
